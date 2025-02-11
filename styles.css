@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #87CEEB; /* Light blue sky */
+}
+
+h1, h2 {
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #FFD700; /* Gold */
+    color: black;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #DAA520; /* Darker gold */
+}
+
+.tower-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.peg {
+    width: 100px;
+    height: 200px;
+    border: 5px solid #8B4513; /* Brown */
+    background-color: #FFF5EE; /* Seashell white */
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 10px;
+}
+
+.disk {
+    height: 20px;
+    margin: 2px;
+    cursor: grab;
+    border-radius: 5px;
+}
+
+#splash-screen, #rules-screen, #level-selection, #result-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #4682B4; /* Steel Blue */
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#result-screen {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
