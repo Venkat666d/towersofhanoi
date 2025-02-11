@@ -3,8 +3,7 @@ let moveCount = 0;
 let numDisks = 3;
 let timer;
 let startTime;
-let bestMoves = Infinity;
-let bestTime = Infinity;
+let selectedPeg = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
@@ -50,12 +49,16 @@ function setupGame() {
         document.getElementById("peg1").appendChild(disk);
 
         disk.addEventListener("dragstart", dragStart);
+        disk.addEventListener("touchstart", touchStart);
     }
 
     document.querySelectorAll(".peg").forEach(peg => {
         peg.addEventListener("dragover", dragOver);
         peg.addEventListener("drop", drop);
+        peg.addEventListener("touchend", touchEnd);
     });
+
+    selectedPeg = 1; // Reset selected peg for keyboard control
 }
 
 function startTimer() {
@@ -66,6 +69,7 @@ function startTimer() {
     }, 1000);
 }
 
+// Mouse and Drag Controls
 function dragStart(event) {
     let peg = event.target.parentElement;
     let topDisk = peg.lastElementChild;
@@ -80,6 +84,43 @@ function dragOver(event) {
 function drop(event) {
     let peg = event.target.closest(".peg");
     if (!peg) return;
+    moveDisk(peg);
+}
+
+// Touch Controls
+function touchStart(event) {
+    let peg = event.target.parentElement;
+    let topDisk = peg.lastElementChild;
+    if (event.target !== topDisk) return;
+    draggedDisk = event.target;
+}
+
+function touchEnd(event) {
+    let peg = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY).closest(".peg");
+    if (!peg) return;
+    moveDisk(peg);
+}
+
+// Keyboard Controls
+document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+        selectedPeg = selectedPeg === 1 ? 3 : selectedPeg - 1;
+    } else if (event.key === "ArrowRight") {
+        selectedPeg = selectedPeg === 3 ? 1 : selectedPeg + 1;
+    } else if (event.key === "Enter") {
+        let peg = document.getElementById(`peg${selectedPeg}`);
+        if (!draggedDisk) {
+            // Pick up disk
+            draggedDisk = peg.lastElementChild;
+        } else {
+            // Drop disk
+            moveDisk(peg);
+        }
+    }
+});
+
+function moveDisk(peg) {
+    if (!draggedDisk) return;
 
     let topDisk = peg.lastElementChild;
     if (!topDisk || parseInt(draggedDisk.dataset.size) < parseInt(topDisk.dataset.size)) {
@@ -92,11 +133,12 @@ function drop(event) {
             displayResult();
         }
     }
+    draggedDisk = null;
 }
 
 function displayResult() {
     let elapsed = Math.floor((Date.now() - startTime) / 1000);
-    
+
     document.getElementById("bestMoves").textContent = `Moves: ${moveCount}`;
     document.getElementById("bestTime").textContent = `Time: ${elapsed}s`;
 
